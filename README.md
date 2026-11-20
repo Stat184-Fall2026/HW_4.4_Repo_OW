@@ -1,28 +1,25 @@
-# Project Title
+# Homework 4.3 Files
 
-Write a 1-2 sentences that quickly and clearly convey what your repo is for.
+This repo contains all completed files and files needed for Homework 4.3.
 
 ## Overview
 
-Expand on those introductory sentences with a brief but informative description of your project's purpose and goals. This section should help visitors decide whether they should dig deeper into your repo/project.
+The purpose of this repository is to put all the files into one shareable location so others can also generate the pdf file from the quarto file. This repo contains all necessary information.
 
-### Interesting Insight (Optional)
-
-This is optional but highly recommended. You'll include one interesting insight from your project as part of the README. This insight is most effective when you include a visual. Keep in mind that this visual must be included as an image file (e.g., JPG, PNG, etc.). You can export plots created with `{ggplot2}` by using the function `ggsave`.
 
 ## Data Sources and Acknowledgements
 
-Be sure to list where you got any data used within the project. Be sure to acknowledge any one whose work or elements you're drawing upon.
+Data used within the project was given to me through the Big 10 Love Data week challenge, and some data was taken directly from R.
 
 ## Current Plan
 
-Provide some information about what you intend to doe with the project. You can additionally refer the visitor to your detailed plan document.
+There is a plan document in the repo, but overall the plan for this project is to create a pdf file containing coding and narrative text that demonstrates what I have learned in the Stat 184 course so far.
 
 ## Repo Structure
 
-Use this section to explain the structure of your repo. This should help visitors quickly figure out where they should look to find certain elements. Further, you can use this space to highlight and briefly explain important/key files in the repo.
+The all main files for the repo are available in the main branch. The images for the repo are stored in a folder called images. The games.csv files need to be merged together to be used in quarto files. 
 
 
 ## Authors
 
-Give information about who are the authors of the project and how people can get in touch if they have questions.
+Olivia Wallace is the author of this repo. She is a freshmen in the Stat 184 course at Penn State. If you have any questions, she can be contacted by email at orw5101@psu.edu.
