@@ -1,0 +1,902 @@
+---
+title: "Stat 184 R Code"
+author: "Olivia Wallace"
+date: "Nov. 12, 2026"
+date-modified: now
+format:
+  pdf:
+    include-in-header:
+      text: |
+        \usepackage{attachfile2}
+echo: false
+---
+
+```{r}
+#| label: loadingPackages
+#| include: false
+
+# Load Packages
+
+library(tidyverse)
+library(kableExtra)
+library(dplyr)
+library(knitr)
+library(ggplot2)
+
+```
+
+# Diamonds Tables of Statistics
+
+The diamonds data in R's ggplot2 package contains 10 variables for over 50,000 diamonds allowing someone to learn a lot of information about diamonds. Specifically, the descriptive statistics for length (x), width (y), and depth (z) can be found based on the cut of the diamonds showing the differences in measurements of each variable based on the cut.
+
+## Length
+
+```{r}
+#| label: diamondsLengthWrangling
+
+# Wrangle Diamonds Length Data
+
+newDiamondsX <- diamonds |>
+  filter_out(x == 0 | y == 0 | z == 0) |>
+  dplyr::select(cut, x) |>
+  pivot_longer(
+    cols = c("x"),
+    names_to = "measure",
+    values_to = "mm"
+  ) |>
+  rename(Cut = cut)
+
+
+```
+
+```{r}
+#| label: diamondsLengthCalculations
+
+# Calculate Diamonds Length Statistics
+
+statValsX <- newDiamondsX |>
+  group_by(Cut) |>
+  summarize(
+    Count = n(),
+    Min = min(mm),
+    Q1 = quantile(mm, 0.2),
+    Q2 = quantile(mm, 0.4),
+    Med = median(mm),
+    Q3 = quantile(mm, 0.6),
+    Q4 = quantile(mm, 0.8), 
+    Max = max(mm),
+    SAM = round(mean(mm), 4),
+    SASD = round(sd(mm), 4)
+  )
+
+
+```
+
+```{r}
+#| label: tbl-diamondsLength
+#| tbl-cap: "Descriptive Statistics for Length of Diamonds based on Cut"
+#| tbl-pos: H
+#| html-table-processing: none
+
+# Create Table for Diamonds Length Statistics
+
+statValsX |>
+  kable() |>
+  kable_styling(
+    "striped",
+    position = "center",
+    row_label_position = "ccccccccccc",
+    html_font = "sans-serif"
+  )
+
+```
+
+@tbl-diamondsLength shows the cut of the diamonds and the count of that cut along with the minimum, the 20% value, the 40% value, the median, the 60% value, the 80% value, the maximum, the sample mean, and the sample standard deviation. These statistics can help to identify the differences in length based on cut, consequently allowing the the viewer to see what cut of diamonds tend to have the longest length. Based on @tbl-diamondsLength, on average fair cut diamonds have the largest length, although all cuts of diamonds have similar averages and maximum lengths. This shows that all diamonds could have a long length but it is more common amongst the fair diamonds. But the fair diamonds have the lowest count, and count increases as cut quality increases so it is harder to find a longer diamond.
+
+## Width
+
+```{r}
+#| label: diamondsWidthWrangling
+
+# Wrangle Diamonds Width Data
+
+newDiamondsY <- diamonds |>
+  filter_out(x == 0 | y == 0 | z == 0) |>
+  dplyr::select(cut, y) |>
+  pivot_longer(
+    cols = c("y"),
+    names_to = "measure",
+    values_to = "mm"
+  ) |>
+  rename(Cut = cut)
+
+
+```
+
+```{r}
+#| label: diamondsWidthCalculations
+
+# Calculate Diamonds Width Statistics
+
+statValsY <- newDiamondsY |>
+  group_by(Cut) |>
+  summarize(
+    Count = n(),
+    Min = min(mm),
+    Q1 = quantile(mm, 0.2),
+    Q2 = quantile(mm, 0.4),
+    Med = median(mm),
+    Q3 = quantile(mm, 0.6),
+    Q4 = quantile(mm, 0.8), 
+    Max = max(mm),
+    SAM = round(mean(mm), 4),
+    SASD = round(sd(mm), 4)
+  )
+
+
+```
+
+```{r}
+#| label: tbl-diamondsWidth
+#| tbl-cap: "Descriptive Statistics for Width of Diamonds based on Cut"
+#| tbl-pos: H
+#| html-table-processing: none
+
+# Create Table for Diamonds Width Statistics
+
+statValsY |>
+  kable() |>
+  kable_styling(
+    "striped",
+    position = "center",
+    row_label_position = "ccccccccccc",
+    html_font = "sans-serif"
+  )
+
+```
+
+@tbl-diamondsWidth shows the same statistics as listed above for @tbl-diamondsLength, but for the width of the diamonds and shares similar conclusions as the length calculations. Fair diamonds also tend to have the largest width followed by Premium cut diamonds. As a result, Fair cut diamonds will tend to have the largest areas because they have the greatest length and width on average. This is interesting because Fair cut diamonds are the worst cut of diamonds, so if you want a large diamond you may have to sacrifice cut.
+
+## Depth
+
+```{r}
+#| label: diamondsDepthWrangling
+
+# Wrangle Diamonds Depth Data
+
+newDiamondsZ <- diamonds |>
+  filter_out(x == 0 | y == 0 | z == 0) |>
+  dplyr::select(cut, z) |>
+  pivot_longer(
+    cols = c("z"),
+    names_to = "measure",
+    values_to = "mm"
+  ) |>
+  rename(Cut = cut)
+
+
+```
+
+```{r}
+#| label: diamondsDepthCalculations
+
+# Calculate Diamonds Depth Statistics
+
+statValsZ <- newDiamondsZ |>
+  group_by(Cut) |>
+  summarize(
+    Count = n(),
+    Min = min(mm),
+    Q1 = quantile(mm, 0.2),
+    Q2 = quantile(mm, 0.4),
+    Med = median(mm),
+    Q3 = quantile(mm, 0.6),
+    Q4 = quantile(mm, 0.8), 
+    Max = max(mm),
+    SAM = round(mean(mm), 4),
+    SASD = round(sd(mm), 4)
+  )
+
+
+```
+
+```{r}
+#| label: tbl-diamondsDepth
+#| tbl-cap: "Descriptive Statistics for Depth of Diamonds based on Cut"
+#| tbl-pos: H
+#| html-table-processing: none
+
+# Create Table for Diamonds Depth Statistics
+
+statValsZ |>
+  kable() |>
+  kable_styling(
+    "striped",
+    position = "center",
+    row_label_position = "ccccccccccc",
+    html_font = "sans-serif"
+  )
+
+```
+
+Additionally, the statistics for the depth of the diamonds is shown in @tbl-diamondsDepth in which all the values are much smaller. The Fair cut diamonds have the biggest average depth yet again. The average values are a lot closer together for depth than they are in @tbl-diamondsLength and @tbl-diamondsWidth as shown through the smaller standard deviations. This means more diamonds are very close to the average values within depth statistics as apposed to lenght and width.
+
+## Connection
+
+Overall, Fair cut diamonds will have the largest volume on average while Ideal cut diamonds will have the smallest volumes on average. This means that diamonds with a better cut will generally be smaller. Fair cut diamonds are also the least probable within the data with only about 3% of diamonds being Fair cut while almost 40% of diamonds are Ideal Cut.
+
+# Big 10 Academic Alliance-Love Data Week
+
+The 2027 data for the Big 10 Academic Alliance contained data for NCAA Women's College Basketball since 2006. There are many data sets that can be used to learn about women's basketball. One major factor in all sports in home court or field advantage. Using the provided data @fig-ncaaWinPercents below, compares home and away win percentage to see how many teams had an advantage at home.
+
+```{r}
+#| label: wrangleTeamsData
+
+# Wrangle NCAA Teams Data
+
+teams_raw <- read.csv(
+  file = "/Users/oliviawallace/Downloads/teams.csv"
+)
+teams_tidy <- teams_raw |>
+  select(
+    4,
+    5
+  ) 
+
+
+```
+
+```{r}
+#| label: wrangleGamesData
+
+# Wranngle NCAA Games Data
+
+games_raw <- read.csv(
+  file = "/Users/oliviawallace/Downloads/games.csv"
+)
+games_tidy <- games_raw |>
+  select(
+    4,
+    6,
+    25,
+    35,
+    39,
+    40,
+    45,
+    54,
+    56,
+    64,
+  ) |>
+  filter_out(neutral_site == "TRUE") |>
+  filter_out(season <= 2020) |>
+  filter_out(attendance == 0) |>
+  group_by(home_id) |>
+  fill(
+    home_venue_id,
+    .direction = "downup"
+  ) |>
+  ungroup() |>
+  filter_out(home_venue_id != venue_id)
+
+```
+
+```{r}
+#| label: calculateWinPercantages
+
+# Calculate Team Win Percentages
+
+home_win <- games_tidy |>
+  group_by(home_id) |>
+  summarize(
+    home_percent = mean(home_winner == "TRUE")
+  )
+
+away_win <- games_tidy |>
+  group_by(away_id) |>
+  summarize(
+    away_percent = mean(away_winner == "TRUE")
+  )
+
+graph_data_a <- full_join(
+  x = teams_tidy,
+  y = home_win,
+  join_by(team_id == home_id)
+)
+
+graph_data <- full_join(
+  x = graph_data_a,
+  y = away_win,
+  join_by(team_id == away_id)
+) |> drop_na(1, 4) 
+
+```
+
+```{r}
+#| label: fig-ncaaWinPercents
+#| fig-cap: "Home vs. Away Win Percentage of Teams Since 2021"
+#| fig-pos: H
+#| fig-alt: "Scatter plot showing positive correlation between team’s home win percentage and away win percentage."
+
+# Create Plot for Win Percentages
+
+ggplot(
+  data = graph_data,
+  mapping = aes(
+    x = home_percent,
+    y = away_percent
+  )
+) +
+  geom_point(alpha = .5) +
+  labs(
+    x = "Home Win Percentage",
+    y = "Away Win Percentage"
+  ) +
+  coord_fixed(ratio = 1) +
+  scale_x_continuous(expand = c(0, 0), limits = c(0,1.00)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0,1.00)) +
+  theme_bw()
+
+```
+
+@fig-ncaaWinPercents graphs away win percentage on the y-axis and home win percentage on the x-axis. Win percentage only contains games since 2021 because the 2020 season could affect the data due to lack of games played and fans in attendence due to the Covid-19 Pandemic. The graph shows a positive correlation between the two variables.
+
+Teams in the top right of the corner win no matter what whether they are playing home or away, these are the top teams since 2021. Teams in the bottom left corner of the graph tend to lose no matter what, there is also no difference between where their games are played. These are the bottom teams since 2021. This means both of the groups specified above do not have home court advantage, they are either just better than their opponents or always worse than there opponent, and cannot use their home court to their advantage. Teams towards the bottom right are the teams that have home court advantage because they win more games at home than away. These are teams that are more likely to win at home no matter the opponent. There are no teams in the top left, but these teams would be teams that perform better in away games than home. Generally, home court advantage does not seem to have a major effect in NCAA Women's College Basketball because a majority of teams have a very close win percentage on the road to their home win percentage.
+
+# Monte Carlo Numerical Integration
+
+The Monte Carlo approach to numerical integration is used to help estimate the integration value or the area under the curve of a function. It uses probability and the area of the bounds to find the approximate value. This method can be used for many different functions for any range of values.
+
+```{r}
+#| label: monteCarloPointGeneration
+
+# Create Point Genorator Function
+
+#' Monte Carlo Simulation - Point Generation
+#'
+#' @description
+#' Function that will generate a point(s) within user specifics, verify whether 
+#' they are greater than or less than the function, graph said points and 
+#' function, and estimate the numerical integration.
+#'
+#' @param x_min int User specified minimum x-value of function range.
+#' @param x_max int User specified maximum x-value of function range.
+#' @param y_min int User specified minimum y-value of function range.
+#' @param y_max int User specified maximum y-value of function range.
+#' @param num_points int User specified number of points generated.
+#'
+#' @returns A list of vectors of points, a data frame containing points and 
+#' whether or not they fall within a function, a plot of the function and points, 
+#' and the estimate of the numerical integration.
+#'
+#' @details
+#' A function that will take the user specified x_min and x_max and sample a 
+#' value within this range and take the user specified y_min and y_max and 
+#' sample a value within this range. It will repeat this for a user specified 
+#' number of times, num_points. A tidy data frame containing the results from 
+#' the point generator and whether or not the are less then or greater then the 
+#' function. A plot containing the function given and the points generated. A 
+#' function to calculate the approximate numerical integration value.
+
+## Point Generation ----
+point_generator <- function(x_min, x_max, y_min, y_max, num_points){
+  random_points <- replicate(
+    n = num_points,
+    c(runif(n = 1, min = x_min, max = x_max),
+      runif(n = 1, min = y_min, max = y_max)
+    )
+  )
+  return(as.data.frame(random_points))
+}
+
+```
+
+```{r}
+#| label: fig-monteCarloPlots
+#| fig-cap: "Monte Carlo Integration for the Weibull Function"
+#| fig-subcap: 
+#|   - "For n = 10 samples"
+#|   - "For n = 100 samples"
+#|   - "For n = 1000 samples"
+#|   - "For n = 10000 samples"
+#| fig-alt: 
+#|   - "Dot plot containing 10 sample above and below the Weibull function."
+#|   - "Dot plot containing 100 sample above and below the Weibull function."
+#|   - "Dot plot containing 1000 sample above and below the Weibull function."
+#|   - "Dot plot containing 10000 sample above and below the Weibull function."
+#| layout-ncol: 2
+
+# Create Subfigure for Monte Carlo Simulations
+
+## Monte Carlo Simulation - Plot N = 10 ----
+
+## Step 1: Run function with Specified Values ----
+points_df_raw <- point_generator(0, 4, 0, .8, 10)
+
+## Step 2: Tidy Data ----
+points_df_tidy <- points_df_raw |>
+  t() |>
+  as.data.frame() |>
+  rename(
+    "x" = "V1",
+    "y" = "V2"
+  )
+
+## Step 3: Verify Points ----
+graph_data <- points_df_tidy |>
+  mutate(
+    within_function = if_else(y <= dweibull(x, shape = 1.5, scale = 1), "True", "False")
+  ) 
+
+## Step 4: Calculate Est. Numerical Integration ----
+proportion <- graph_data |>
+  group_by(within_function) |>
+  summarize(count = n()) |>
+  mutate(proportion = count / sum(count))
+
+num_int <- proportion$proportion[[2]] * 3.2
+
+## Step 5 : Create Plot ----
+ggplot(data = graph_data,
+       mapping = aes(
+         x = x,
+         y = y,
+         color = within_function
+       )) + geom_point(alpha = .5) +
+  stat_function(
+    fun = dweibull,
+    args = list(shape = 1.5, scale = 1),
+    xlim = c(0, 4),
+    color = "black"
+  ) +
+  scale_color_manual(
+   values = c("#E90C00", "#418B24")
+  ) +
+  labs(
+    color = "Flag",
+    caption = paste0("Est. Numerical Integration: ", num_int)) +
+  theme_bw() +
+  theme(
+    legend.position = "bottom"
+  )
+
+## Monte Carlo Simulation - Plot N = 100 ----
+
+## Step 1: Run function with Specified Values ----
+points_df_raw <- point_generator(0, 4, 0, .8, 100)
+
+## Step 2: Tidy Data ----
+points_df_tidy <- points_df_raw |>
+  t() |>
+  as.data.frame() |>
+  rename(
+    "x" = "V1",
+    "y" = "V2"
+  )
+
+## Step 3: Verify Points ----
+graph_data <- points_df_tidy |>
+  mutate(
+    within_function = if_else(y <= dweibull(x, shape = 1.5, scale = 1), "True", "False")
+  ) 
+
+## Step 4: Calculate Est. Numerical Integration ----
+proportion <- graph_data |>
+  group_by(within_function) |>
+  summarize(count = n()) |>
+  mutate(proportion = count / sum(count))
+
+num_int <- proportion$proportion[[2]] * 3.2
+
+## Step 5 : Create Plot ----
+ggplot(data = graph_data,
+       mapping = aes(
+         x = x,
+         y = y,
+         color = within_function
+       )) + geom_point(alpha = .5) +
+  stat_function(
+    fun = dweibull,
+    args = list(shape = 1.5, scale = 1),
+    xlim = c(0, 4),
+    color = "black"
+  ) +
+  scale_color_manual(
+   values = c("#E90C00", "#418B24")
+  ) +
+  labs(
+    color = "Flag",
+    caption = paste0("Est. Numerical Integration: ", num_int)) +
+  theme_bw() +
+  theme(
+    legend.position = "bottom"
+  )
+
+## Monte Carlo Simulation - Plot N = 1000 ----
+
+## Step 1: Run function with Specified Values ----
+points_df_raw <- point_generator(0, 4, 0, .8, 1000)
+
+## Step 2: Tidy Data ----
+points_df_tidy <- points_df_raw |>
+  t() |>
+  as.data.frame() |>
+  rename(
+    "x" = "V1",
+    "y" = "V2"
+  )
+
+## Step 3: Verify Points ----
+graph_data <- points_df_tidy |>
+  mutate(
+    within_function = if_else(y <= dweibull(x, shape = 1.5, scale = 1), "True", "False")
+  ) 
+
+## Step 4: Calculate Est. Numerical Integration ----
+proportion <- graph_data |>
+  group_by(within_function) |>
+  summarize(count = n()) |>
+  mutate(proportion = count / sum(count))
+
+num_int <- proportion$proportion[[2]] * 3.2
+
+## Step 5 : Create Plot ----
+ggplot(data = graph_data,
+       mapping = aes(
+         x = x,
+         y = y,
+         color = within_function
+       )) + geom_point(alpha = .5) +
+  stat_function(
+    fun = dweibull,
+    args = list(shape = 1.5, scale = 1),
+    xlim = c(0, 4),
+    color = "black"
+  ) +
+  scale_color_manual(
+   values = c("#E90C00", "#418B24")
+  ) +
+  labs(
+    color = "Flag",
+    caption = paste0("Est. Numerical Integration: ", num_int)) +
+  theme_bw() +
+  theme(
+    legend.position = "bottom"
+  )
+
+## Monte Carlo Simulation - Plot N = 10000 ----
+
+## Step 1: Run function with Specified Values ----
+points_df_raw <- point_generator(0, 4, 0, .8, 10000)
+
+## Step 2: Tidy Data ----
+points_df_tidy <- points_df_raw |>
+  t() |>
+  as.data.frame() |>
+  rename(
+    "x" = "V1",
+    "y" = "V2"
+  )
+
+## Step 3: Verify Points ----
+graph_data <- points_df_tidy |>
+  mutate(
+    within_function = if_else(y <= dweibull(x, shape = 1.5, scale = 1), "True", "False")
+  ) 
+
+## Step 4: Calculate Est. Numerical Integration ----
+proportion <- graph_data |>
+  group_by(within_function) |>
+  summarize(count = n()) |>
+  mutate(proportion = count / sum(count))
+
+num_int <- proportion$proportion[[2]] * 3.2
+
+## Step 5 : Create Plot ----
+ggplot(data = graph_data,
+       mapping = aes(
+         x = x,
+         y = y,
+         color = within_function
+       )) + geom_point(alpha = .5) +
+  stat_function(
+    fun = dweibull,
+    args = list(shape = 1.5, scale = 1),
+    xlim = c(0, 4),
+    color = "black"
+  ) +
+  scale_color_manual(
+   values = c("#E90C00", "#418B24")
+  ) +
+  labs(
+    color = "Flag",
+    caption = paste0("Est. Numerical Integration: ", num_int)) +
+  theme_bw() +
+  theme(
+    legend.position = "bottom"
+  )
+
+```
+
+@fig-monteCarloPlots above, shows the graph for Monte Carlo Numerical Integration for four different sample sizes, n = 10, 100, 1000, 10000, for the Weibull function on the domain of \[0, 4\] and the range of \[0, .8\]. The points that fall on or within the function are green and the percent of green points in each graph is multiplied by the area, 3.2, to find the estimated numerical integration. The estimated numerical integration values are shown near the bottom of each sub-figure which are different for each sample size.
+
+We can learn from @fig-monteCarloPlots that the more samples used when running the Monte Carlo Simulation the closer to the actual Numerical Integration, meaning if you want the best possible estimate you need to run as many samples as possible. Given the estimated Numerical Integrations for these scenarios I believe the actual Numerical value is around .98 because the values become closer and closer to this value and the n = 10000 simulation is closest to this value. Outside of numerical integration, this plot shows the importance of having a large enough sample in statistical computations because the larger samples contain an approximate numerical integration closest to the actual numerical integration.
+
+# Planning and Prompting GenAI Tools
+
+Generative AI can be used for many different things allowing a wide variety of outcomes. While using GenAI seems like the easy route, it is important to use it properly. One of the biggest issues when using AI tools is being too vague, causing the AI to give inccorect or unuseable results given the context. @fig-genAIPlanned and @fig-genAIUnplanned shown below will show the differences in giving a GenAI tool an in depth plan versus a vague prompt.
+
+## GenAI with a Plan
+
+### GenAI Plan
+
+Take this uploaded data set and tidy it following the steps below:
+
+1.  Change name of the first four column headings to original title plus “\_null”
+
+2.  Change the name of the last four column headings to original title plus “\_treatment”
+
+3.  Combine the columns with the same characters before the “\_” and put the values after the underscore into its own column corresponding with the correct rows so there are 5 columns and 31 rows, name the new row “group”
+
+Next, create a plot using the following steps:
+
+1.  Group the data by the column labelled “group”
+
+2.  Find the average of each column, “y0”, “y1”, “y2”, and “y3” for each group, “null” and “treatment”
+
+3.  Create a graph with quantitative values calcium on the y axis and categorical years on the x axis.
+
+4.  Graph the points for the null group in one shape and color with a line connecting the points and graph the treatment group in another color and shape
+
+5.  Add a key at the bottom of the graph for the “null” and “treatment” showing what color and shape each group is.
+
+6.  Label the y-axis calcium and the x-axis year
+
+7.  Title the graph “Average Calcium Levels in Women”
+
+8.  Generate alt text for the plot but to not include it in the image for the plot
+
+### GenAI Results
+
+![GenAI Generated Plot using Plan](images/average_calcium_levels_women.png){#fig-genAIPlanned fig-alt="Graph containgin two lines one for the null groups calcium levels and one for the treatment groups calcium levels" height="500pt"}
+
+Line graph titled "Average Calcium Levels in Women." The x-axis represents year (y0, y1, y2, y3), and the y-axis represents calcium. Two groups are displayed: null, represented by blue circular markers connected by a line, and treatment, represented by orange square markers connected by a line. Both groups generally decline by y3. The null group has higher average calcium levels at y0 and y1, while the treatment group has a higher average at y2. At y3, the averages are very similar.
+
+## GenAI without Plan
+
+### Prompt
+
+Create a data visualization for these data. Calcium.csv
+
+### Graphic
+
+![GenAI Generated Plot with no Plan](images/chatgptPlot.png){#fig-genAIUnplanned fig-alt="Images containing one line in an M shape" height="500pt"}
+
+## Comparison
+
+The image generated by ChatGPT with a plan, as shown in @fig-genAIPlanned, shows to lines of averages one for the null group that did not change their lifestyle and one for the treatment group that was put on diet and exercise plans. The points reflect the difference in the calcium measurements of the two groups for each year, the initial measuring, 1 year later, 2 years later, and three years later. This plot can be used to show how much of a difference exercise and dieting can make on women's calcium levels and help to see whether the treatment plan is worth it. One things the GenAI with a plan fails to do is properly generate alt-text for the figure. When prompted with, "Generate alt text for the plot but to not include it in the image for the plot," it did generate text, but not properly formatted alt text. The text is way to long and goes beyond a short description of the visuals, it begins analyzing the graphic.
+
+@fig-genAIUnplanned was generated by a general prompt to ChatGPT without a plan. This image uses the untidy data and directly graphs it. Some issues with this graph include that fact that the two groups are on one line. The first half of the line shows the null group and the second half shows the treatment group. The plot also does not take into account the fact that the two y0 columns should be the same place on the graph not separate areas on the x-axis. 
+
+Overall, using a plan is very important to getting proper results from AI. @fig-genAIUnplanned uses the untidy data and since its not specified to tidy the data. If shared the plot would not properly represent the data, and could cause misinformation to be spread that could negatively impact people who see the graphic. The plot created using a plan, @fig-genAIPlanned, accurately shows the separated groups and cases allowing the graphic to be interpreted beneficially by the people who use. When using GenAI it is important to have a plan snd review the results, so you can insure the information you are using or sharing does not negatively impact others.
+
+# Reflection
+
+I feel Stat 184 has been very beneficial to me this semester. I have learned many things that will prepare me for future classes and more importantly, i feel this class has prepared me for future jobs. 
+
+The biggest thing I have learned from Stat 184 is the importance of having a plan. Planning helps me to stay on task and work efficiently, allowing me to do all the critical thinking before doing the work. Plans also make identifying and fixing potential errors much easier because I can look back through each step and find where I went wrong. I believe homework 3.4 emphasized the importance of planning to me most, because of the PCIP process involved. I created an initial plan and followed it then using my past plan was able to update it to improve my data visualizations.
+
+This class has also allowed me to learn some basics of coding in R and many feature of R that can be useful to me. I believe the most impactful part of R I have learned so far is the tidying and wrangling processes. It can make working with data much easier. I found this especially helpful when working with the armed forces data that contained over 1 million cases. Without and application like RStudio it would have been very difficult to deal with that much information and I feel this is something I will be able to use for many more years. 
+
+Lastly, I feel like this class has overall helped me to understand what will be expected of me in the workforce. I have learned many things about the roles of a Statistician and how much value they hold in any area of life. I feel the in class lecture did an amazing job of connecting what and especially why we did things to real life helping me to feel much more prepared for life after college than I was at the beginning of the semester.
+
+\pagebreak
+
+# Generative AI Appendix
+
+## Usages
+
+[GenAI Results]
+
+[Graphic]
+
+## Details
+
+### Usage 1
+
+#### Tool
+
+Model: GPT-6
+
+Knowledge Cutoff: June 2026
+
+#### Date
+
+Wednesday, November 18th, 2026
+
+#### Prompts
+
+Original: Take this uploaded data set and tidy it following the steps below:
+
+  1. Change name of the first four column headings to original title plus “_null” 
+  
+  2. Change the name of the last four column headings to original title plus  “_treatment”
+  
+  3. Combine the columns with the same characters before the “_” and put the values after the underscore into its own column corresponding with the correct rows so there are 5 columns and 31 rows, name the new row “group”
+  
+Next, create a plot using the following steps:
+
+  1. Group the data by the column labelled “group”
+  
+  2. Find the average of each column, “y0”, “y1”, “y2”, and “y3” for each group, “null” and “treatment”
+  
+  3. Create a graph with quantitative values calcium on the y axis and categorical years on the x axis.
+  
+  4. Graph the points for the null group in one shape and color with a line connecting the points and graph the treatment group in another color and shape
+  
+  5. Add a key at the bottom of the graph for the “null” and “treatment” showing what color and shape each group is.
+  
+  6. Label the y-axis calcium and the x-axis year
+  
+  7. Title the graph “Average Calcium Levels in Women”
+  
+  8. Generate alt text for the plot but to not include it in the image for the plot
+
+
+#### Responses
+
+Original: 
+
+![](images/average_calcium_levels_women.png){fig-alt="Graph containgin two lines one for the null groups calcium levels and one for the treatment groups calcium levels" height="100pt"}
+
+Completed! I cleaned the uploaded calcium dataset, reorganized the columns, calculated the group averages, and created the graph.
+
+  1. Cleaned dataset
+Completed: 31 rows × 5 columns
+
+The original columns were renamed and combined into the following structure:
+
+group	y0	y1	y2	y3
+
+null	Calcium	Calcium	Calcium	Calcium
+
+treatment	Calcium	Calcium	Calcium	Calcium
+
+The original file contained 16 rows. One row had missing values across all four null columns, so the combined dataset correctly contains 31 observations.
+
+Download cleaned calcium dataset (CSV)
+
+  2. Group averages
+  
+Group	y0	y1	y2	y3
+
+Null	72.380	73.293	72.473	64.787
+
+Treatment	69.288	70.656	71.181	64.531
+
+Download group averages (CSV)
+
+  3. Graph
+Graph generated
+
+Download Average Calcium Levels in Women graph (PNG)
+
+The graph includes:
+
+•	Null group: blue circles connected by a line.
+
+•	Treatment group: orange squares connected by a line.
+
+•	X-axis labeled year.
+
+•	Y-axis labeled calcium.
+
+•	Legend at the bottom.
+
+•	Requested title.
+
+  4. Alternative text (not included in graph)
+  
+Alt text:
+
+Line graph titled "Average Calcium Levels in Women." The x-axis represents year (y0, y1, y2, y3), and the y-axis represents calcium. Two groups are displayed: null, represented by blue circular markers connected by a line, and treatment, represented by orange square markers connected by a line. Both groups generally decline by y3. The null group has higher average calcium levels at y0 and y1, while the treatment group has a higher average at y2. At y3, the averages are very similar.
+
+All three files are ready to use in your assignment.
+
+Files:
+
+
+\textattachfile{downloads/calcium_tidy.csv}{Calcium Tidy Data}
+
+\textattachfile{downloads/calcium_group_means.csv}{Calcium Averages}
+
+\textattachfile{images/chatgptPlot.png}{Calcium Plot}
+
+
+Follow Up: 
+
+I'm GPT-6, an OpenAI reasoning model.
+
+- Model: GPT-6
+
+- Knowledge cutoff: 2025-06
+
+- Current date: November 18, 2026
+
+- Model type: Large language model (reasoning)
+
+- Developer: OpenAI
+
+I can help with math, statistics, data analysis, coding, research, writing, and image generation.
+
+### Usage 2
+
+#### Tool
+
+Model: GPT-5.3
+
+Knowledge Cutoff: August 2025
+
+#### Date
+
+Tuesday, March 31st, 2026
+
+#### Prompts
+
+Original: Create a data visualization for these data. Calcium.csv
+
+Follow Up: What is your version information?
+
+#### Responses
+
+Original:  
+
+![](images/chatgptPlot.png){fig-alt="Images containing one line in an M shape" height="100pt"}
+
+I created a visualization showing the average value of each column in your dataset.
+
+What this shows:
+
+•	Each point represents the mean (average) of one column (y0, y1, y2, y3, etc.).
+
+•	You can quickly compare which variables tend to have higher or lower values overall.
+
+•	For example, some columns cluster around ~70–73, while others drop closer to ~65.
+ 
+If you want something more insightful, I can also create:
+
+•	Boxplots (to show spread and outliers)
+
+•	Time series plots (if rows represent time/order)
+
+•	Correlation heatmaps
+
+•	Side-by-side comparisons (e.g., y0 vs y0.1)
+
+Just tell me 👍
+
+Follow Up: 
+
+You’re chatting with ChatGPT based on the GPT-5.3 architecture.
+
+Key details:
+
+•	Model: GPT-5.3
+
+•	Knowledge cutoff: August 2025
+
+•	Current date (system): March 31, 2026
+
+If you need more technical details (capabilities, differences vs GPT-4/5, etc.), just let me know 👍
+
+
+\pagebreak
+
+# Code Appendix
+
+```{r}
+#| label: codeAppend
+#| ref-label: !expr knitr::all_labels()
+#| echo: true
+#| eval: false
+
+```
